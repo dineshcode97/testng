@@ -1,0 +1,89 @@
+pipeline {
+    agent any
+    parameters {
+        string(
+            name: 'role',
+            defaultValue: '',
+            description: 'Role of instance'
+        )
+        string(
+            name: 'region',
+            defaultValue: 'us-east-1',
+            description: 'AWS region'
+        )
+        string(
+            name: 'vpc_cidr',
+            defaultValue: '10.1.0.0/16',
+            description: 'CIDR of public subnet'
+        )
+        string(
+            name: 'public_subnets',
+            defaultValue: '10.1.1.0/24,10.1.2.0/24',
+            description: 'CIDR of public subnet'
+        )
+        string(
+            name: 'private_subnets',
+            defaultValue: '10.1.3.0/24,10.1.4.0/24',
+            description: 'CIDR of private subnet'
+        )
+        string(
+            name: 'az_suffixes',
+            defaultValue: 'a,b',
+            description: 'AZ suffixes'
+        )
+        string(
+            name: 'instance_type',
+            defaultValue: 't2.micro',
+            description: 'Instance type'
+        )
+        string(
+            name: 'disk_size',
+            defaultValue: '20',
+            description: 'Disk size'
+        )
+        string(
+            name: 'min_size',
+            defaultValue: '1',
+            description: 'ASG min size'
+        )
+        string(
+            name: 'max_size',
+            defaultValue: '2',
+            description: 'ASG max size'
+        )
+        string(
+            name: 'desired_capacity',
+            defaultValue: '1',
+            description: 'ASG desired capacity'
+        )
+    }
+    stages {
+        stage('Validation') {
+            steps {
+                script {
+                    def variables = [
+                        role,
+                        region,
+                        vpc_cidr,
+                        public_subnets,
+                        private_subnets,
+                        az_suffixes,
+                        instance_type,
+                        disk_size,
+                        min_size,
+                        max_size,
+                        desired_capacity
+                    ]
+                    
+                    def nullVariables = variables.findAll { it == null || it.trim() == '' }
+                    
+                    if (nullVariables) {
+                        error("The following variables are null or empty: ${nullVariables.join(', ')}")
+                    }
+                }
+            }
+        }
+        
+        // Add your other pipeline stages here
+    }
+}
