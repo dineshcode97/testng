@@ -1,2 +1,2 @@
 FROM ubuntu
-RUN apt get update && apt install python3
+CMD ["echo","Hey Am Dockerfile"]
