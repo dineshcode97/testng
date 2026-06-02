@@ -1,2 +1,2 @@
 FROM ubuntu
-RUN apt update && apt install python3
+RUN apt get update && apt install python3
